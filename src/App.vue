@@ -50,7 +50,7 @@ export default {
     const isConverting = ref(false)
 
     const load = async () => {
-      await ffmpeg.load();
+      await ffmpeg.load()
       isReady.value = true
     }
 
