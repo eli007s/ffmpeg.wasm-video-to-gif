@@ -10,7 +10,7 @@
               <video v-if="videoSrc" controls :src="videoSrc" class="mb-4"></video>
               <input ref="fileInput" @change="updatePreview" type="file" class="hidden" accept="video/*" />
               <div>
-                <Button :disabled="!isReady || isConverting" @click="$refs.fileInput.click()" text="Select Video File" />
+                <Button :disabled="!isReady || isConverting" @click="$refs.fileInput.click()" :text="isReady ? 'Select Video File' : 'Loading ffmpeg...'" />
                 <Button class="ml-2" v-if="videoSrc" :disabled="isConverting" @click="convertToGIF(video)" :text="isConverting ? 'Converting Video...' : 'Convert To GIF'" />
               </div>
           </div>
