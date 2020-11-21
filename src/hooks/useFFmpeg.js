@@ -11,15 +11,13 @@ export default function useFFmpeg() {
     const isSupported = ref(true)
     
     const load = async () => {
-        if (!(/Chrome/i.test(navigator.userAgent))) {
+        try {
+            await ffmpeg.load()
+            isReady.value = true
+        } catch (e) {
+            console.log(e)
             isSupported.value = false
-            return
         }
-        
-        isSupported.value = true
-
-        await ffmpeg.load()
-        isReady.value = true
     }
 
     load()
