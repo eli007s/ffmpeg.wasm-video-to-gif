@@ -11,7 +11,7 @@
               <input ref="fileInput" @change="updatePreview" type="file" class="hidden" accept="video/*" />
               <div>
                 <Button :disabled="!isReady || isConverting" @click="$refs.fileInput.click()" text="Select Video File" />
-                <Button class="ml-2" v-if="videoSrc" :disabled="isConverting" @click="convertToGIF" :text="isConverting ? 'Converting Video...' : 'Convert To GIF'" />
+                <Button class="ml-2" v-if="videoSrc" :disabled="isConverting" @click="convertToGIF(video)" :text="isConverting ? 'Converting Video...' : 'Convert To GIF'" />
               </div>
           </div>
           <div class="bg-white rounded md:shadow p-4">
@@ -33,6 +33,7 @@ import { onMounted, ref } from 'vue'
 import FFmpeg from '@ffmpeg/ffmpeg'
 
 import { downloadBlob } from './utils'
+import useFFmpeg from './hooks/useFFmpeg'
 
 import Button from './components/Button.vue'
 
@@ -45,16 +46,13 @@ export default {
   setup() {
     const videoSrc = ref(null)
     const video = ref(null)
-    const isReady = ref(false)
-    const imageSrc = ref(null)
-    const isConverting = ref(false)
 
-    const load = async () => {
-      await ffmpeg.load()
-      isReady.value = true
-    }
-
-    load()
+    const {
+      isReady,
+      convertToGIF,
+      output: imageSrc,
+      isConverting
+    } = useFFmpeg()
 
     const updatePreview = (e) => {
       if (e.target.files.length) {
@@ -62,27 +60,16 @@ export default {
         video.value = e.target.files[0]
       }
     }
-
-    const convertToGIF = async () => {
-      isConverting.value = true
-      let tempFileOutputName = `${Date.now()}.gif`
-      ffmpeg.FS('writeFile', video.value.name, await fetchFile(video.value))
-      await ffmpeg.run('-i', video.value.name, tempFileOutputName)
-
-      const data = ffmpeg.FS('readFile', tempFileOutputName)
-
-      imageSrc.value = URL.createObjectURL(new Blob([data.buffer]), { type: 'image/gif' })
-      isConverting.value = false
-    }
-
+    
     return {
       videoSrc,
       updatePreview,
       imageSrc,
-      convertToGIF,
       isConverting,
       isReady,
-      downloadBlob
+      convertToGIF,
+      downloadBlob,
+      video
     }
   }
 }
