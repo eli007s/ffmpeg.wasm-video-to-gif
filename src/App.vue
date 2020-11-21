@@ -30,14 +30,9 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import FFmpeg from '@ffmpeg/ffmpeg'
 
 import useFFmpeg from './hooks/useFFmpeg'
-
 import Button from './components/Button.vue'
-
-const { createFFmpeg, fetchFile } = FFmpeg
-const ffmpeg = createFFmpeg({ log: false })
 
 export default {
   name: 'App',
