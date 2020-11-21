@@ -1,5 +1,5 @@
 {
-  "name": "wasm-video-to-gif",
+  "name": "ffmpeg.wasm-video-to-gif",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
