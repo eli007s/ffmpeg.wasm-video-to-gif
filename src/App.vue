@@ -18,7 +18,7 @@
             <div class="flex items-center justify-center h-full">
               <div v-if="imageSrc" class="text-center">
                 <img :src="imageSrc" alt="output gif" class="mb-4" />
-                <Button @click="downloadBlob(imageSrc)" text="Download GIF" />
+                <Button @click="downloadBlob" text="Download GIF" />
               </div>
               <div v-else class="text-gray-500 text-xl">Output goes here</div>
             </div>
@@ -32,7 +32,6 @@
 import { onMounted, ref } from 'vue'
 import FFmpeg from '@ffmpeg/ffmpeg'
 
-import { downloadBlob } from './utils'
 import useFFmpeg from './hooks/useFFmpeg'
 
 import Button from './components/Button.vue'
@@ -59,6 +58,13 @@ export default {
         videoSrc.value = URL.createObjectURL(e.target.files[0])
         video.value = e.target.files[0]
       }
+    }
+
+    const downloadBlob = () => {
+      const saveImg = document.createElement('a')
+      saveImg.href = imageSrc.value
+      saveImg.download = `${Date.now()}.gif`
+      saveImg.click()
     }
     
     return {
