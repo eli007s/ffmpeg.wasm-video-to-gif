@@ -5,7 +5,8 @@
           <h1 class="text-4xl font-semibold">Video to GIF converter</h1>
           <h3 class="text-lg">Vue + FFMPEG.WASM + Tailwind CSS</h3>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      <div v-if="!isSupported" class="text-xl text-center mt-5">Sorry, ffmpeg.wasm is currently supported only in Chrome desktop 😔</div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
           <div :class="`bg-white rounded md:shadow p-4 ${!videoSrc && 'h-60'} flex flex-col items-center justify-center`">
               <video v-if="videoSrc" controls :src="videoSrc" class="mb-4"></video>
               <input ref="fileInput" @change="updatePreview" type="file" class="hidden" accept="video/*" />
@@ -45,7 +46,8 @@ export default {
       isReady,
       convertToGIF,
       output: imageSrc,
-      isConverting
+      isConverting,
+      isSupported
     } = useFFmpeg()
 
     const updatePreview = (e) => {
@@ -70,7 +72,8 @@ export default {
       isReady,
       convertToGIF,
       downloadBlob,
-      video
+      video,
+      isSupported
     }
   }
 }

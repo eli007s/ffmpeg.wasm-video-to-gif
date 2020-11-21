@@ -8,8 +8,16 @@ export default function useFFmpeg() {
     const isReady = ref(false)
     const isConverting = ref(false)
     const output = ref(null)
-
+    const isSupported = ref(true)
+    
     const load = async () => {
+        if (!(/Chrome/i.test(navigator.userAgent))) {
+            isSupported.value = false
+            return
+        }
+        
+        isSupported.value = true
+
         await ffmpeg.load()
         isReady.value = true
     }
@@ -32,6 +40,7 @@ export default function useFFmpeg() {
         isReady,
         convertToGIF,
         output,
-        isConverting
+        isConverting,
+        isSupported
     }
 }
